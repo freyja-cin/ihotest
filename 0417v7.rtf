@@ -1,0 +1,503 @@
+{\rtf1\ansi\ansicpg950\cocoartf2761
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 <!DOCTYPE html>\
+<html lang="zh-TW">\
+<head>\
+  <meta charset="UTF-8" />\
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>\
+  <title>\uc0\u33406 \u31166 \u29983 \u37291 \u65372 \u20445 \u20581 \u21839 \u21367 \u25512 \u34214 \u31995 \u32113 </title>\
+  <style>\
+    body \{\
+      font-family: 'Noto Sans TC', sans-serif;\
+      background-color: #f9fbf7;\
+      color: #2f3e2f;\
+      margin: 0;\
+      padding: 0;\
+    \}\
+\
+    .container \{\
+      max-width: 800px;\
+      margin: 40px auto;\
+      padding: 24px;\
+      background: #ffffff;\
+      border-radius: 12px;\
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);\
+    \}\
+\
+    h1, h2, h3 \{\
+      color: #4e7346;\
+      text-align: center;\
+    \}\
+\
+    .progress-container \{\
+      width: 100%;\
+      height: 8px;\
+      background-color: #e2e8dc;\
+      border-radius: 4px;\
+      overflow: hidden;\
+      margin: 20px 0;\
+    \}\
+\
+    .progress-bar \{\
+      height: 100%;\
+      width: 0%;\
+      background-color: #a2d49d;\
+      transition: width 0.3s ease;\
+    \}\
+\
+    .question \{\
+      margin-bottom: 24px;\
+    \}\
+\
+    .option \{\
+      background: #f0f6ef;\
+      border: 1px solid #cdddc6;\
+      padding: 12px 16px;\
+      border-radius: 8px;\
+      margin-bottom: 10px;\
+      display: block;\
+      cursor: pointer;\
+      transition: all 0.2s ease;\
+    \}\
+\
+    .option:hover \{\
+      background-color: #e8f3e3;\
+    \}\
+\
+    .option input \{\
+      margin-right: 10px;\
+    \}\
+\
+    .button-group \{\
+      text-align: center;\
+      margin-top: 30px;\
+    \}\
+\
+    button \{\
+      padding: 12px 24px;\
+      background-color: #7cbf6d;\
+      color: white;\
+      border: none;\
+      border-radius: 8px;\
+      font-size: 16px;\
+      cursor: pointer;\
+      margin: 0 10px;\
+      transition: background 0.2s ease;\
+    \}\
+\
+    button:hover \{\
+      background-color: #5ea955;\
+    \}\
+\
+    .hidden \{\
+      display: none;\
+    \}\
+\
+    .result-card \{\
+      background: #f6faf4;\
+      border: 1px solid #d6e5d2;\
+      border-radius: 10px;\
+      padding: 16px;\
+      margin-bottom: 16px;\
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);\
+    \}\
+\
+    .card-list \{\
+      display: grid;\
+      gap: 16px;\
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));\
+      margin-top: 16px;\
+    \}\
+\
+    #results p \{\
+      text-align: center;\
+      font-size: 18px;\
+    \}\
+  </style>\
+</head>\
+<body>\
+  <div class="container">\
+    <h1>\uc0\u33406 \u31166 \u29983 \u37291 \u65372 \u20445 \u20581 \u25512 \u34214 \u21839 \u21367 </h1>\
+\
+    <div class="progress-container">\
+      <div class="progress-bar" id="progressBar"></div>\
+    </div>\
+\
+    <div id="quiz"></div>\
+\
+    <div class="button-group">\
+      <button id="nextBtn">\uc0\u19979 \u19968 \u38988 </button>\
+      <button id="submitBtn" class="hidden">\uc0\u26597 \u30475 \u25512 \u34214 \u32080 \u26524 </button>\
+    </div>\
+\
+    <div id="results" class="hidden">\
+      <h2>\uc0\u25512 \u34214 \u29986 \u21697 </h2>\
+      <div id="priority-section">\
+        <h3>\uc0\u20778 \u20808 \u25512 \u34214 \u65288 \u20027 \u25512 \u29986 \u21697 \u65289 </h3>\
+        <div class="card-list" id="priority-list"></div>\
+        <p><strong>\uc0\u20027 \u25512 \u32317 \u37329 \u38989 \u65306 </strong><span id="priority-total">0</span></p>\
+      </div>\
+      <div id="optional-section">\
+        <h3>\uc0\u21152 \u36092 \u25512 \u34214 </h3>\
+        <div class="card-list" id="optional-list"></div>\
+      </div>\
+      <p><strong>\uc0\u32317 \u25512 \u34214 \u37329 \u38989 \u65306 </strong><span id="all-total">0</span></p>\
+    </div>\
+    <div class="button-group" style="margin-top: 40px;">\
+</div>\
+\
+  </div>\
+\
+  <script>\
+ const quizData = [\
+  \{\
+    title: "1\uc0\u65039 \u8419  \u35531 \u21839 \u24744 \u30340 \u24615 \u21029 \u26159 \u65311 ",\
+    type: "radio",\
+    options: [\
+      \{ label: "\uc0\u30007 \u24615 ", scores: [] \},\
+      \{ label: "\uc0\u22899 \u24615 ", scores: [] \}\
+    ]\
+  \},\
+  \{\
+    title: "2\uc0\u65039 \u8419  \u24744 \u30340 \u24180 \u40801 \u21312 \u38291 \u26159 \u65311 ",\
+    type: "radio",\
+    options: [\
+      \{ label: "18\'9625 \uc0\u27506 ", scores: [] \},\
+      \{ label: "26\'9635 \uc0\u27506 ", scores: [] \},\
+      \{ label: "36\'9645 \uc0\u27506 ", scores: [] \},\
+      \{ label: "46\'9660 \uc0\u27506 ", scores: [] \},\
+      \{ label: "60 \uc0\u27506 \u20197 \u19978 ", scores: [] \}\
+    ]\
+  \},\
+  \{\
+    title: "3\uc0\u65039 \u8419  \u24744 \u30340 \u20316 \u24687 \u36890 \u24120 \u26159 \u65311 ",\
+    type: "radio",\
+    options: [\
+      \{ label: "\uc0\u26089 \u30561 \u26089 \u36215 \u35215 \u24459 \u22411 ", scores: [] \},\
+      \{ label: "\uc0\u29100 \u22812 \u21152 \u29677 \u12289 \u20316 \u24687 \u19981 \u22266 \u23450 ", scores: ["B1+2", "B2+2", "Q10+1", "C1+1"] \},\
+      \{ label: "\uc0\u30333 \u22825 \u26377 \u31934 \u31070 \u65292 \u26202 \u19978 \u23481 \u26131 \u32047 ", scores: ["B1+1", "F1+1", "Q10+1"] \},\
+      \{ label: "\uc0\u30333 \u22825 \u31934 \u31070 \u24046 ", scores: ["B1+2", "P1+1", "F1+1"] \}\
+    ]\
+  \},\
+  \{\
+    title: "4\uc0\u65039 \u8419  \u26368 \u36817 \u26159 \u21542 \u32147 \u24120 \u20986 \u29694 \u19979 \u21015 \u24773 \u27841 \u65311 \u65288 \u21487 \u35079 \u36984 \u65289 ",\
+    type: "checkbox",\
+    options: [\
+      \{ label: "\uc0\u36215 \u24202 \u26178 \u20173 \u24863 \u30130 \u32047 ", scores: ["B1+1", "B2+1"] \},\
+      \{ label: "\uc0\u24037 \u20316 \u20013 \u24120 \u24120 \u24863 \u21040 \u30130 \u24970 ", scores: ["B1+2", "F1+1"] \},\
+      \{ label: "\uc0\u26202 \u19978 \u30561 \u30496 \u21697 \u36074 \u19981 \u22909 ", scores: ["Q10+1", "F1+1"] \},\
+      \{ label: "\uc0\u19979 \u21320 \u24120 \u24819 \u30561 \u35258 ", scores: ["P1+1", "B1+1"] \}\
+    ]\
+  \},\
+  \{\
+    title: "5\uc0\u65039 \u8419  \u24744 \u24179 \u26178 \u30340 \u39154 \u39135 \u22411 \u24907 \u26159 \u65311 ",\
+    type: "radio",\
+    options: [\
+      \{ label: "\uc0\u33258 \u24049 \u29038 ", scores: [] \},\
+      \{ label: "\uc0\u22806 \u39135 \u26063 ", scores: ["S1+2", "F1+1", "C1+1"] \},\
+      \{ label: "\uc0\u39154 \u39135 \u25511 \u21046 \u20013 ", scores: ["P1+1", "S2+1"] \},\
+      \{ label: "\uc0\u24120 \u24120 \u20098 \u21507 ", scores: ["P1+2", "S2+1"] \}\
+    ]\
+  \},\
+  \{\
+    title: "6\uc0\u65039 \u8419  \u24744 \u30446 \u21069 \u23565 \u39636 \u24907 \u30340 \u24863 \u35258 \u26159 \u65311 ",\
+    type: "radio",\
+    options: [\
+      \{ label: "\uc0\u28415 \u24847 \u29694 \u27841 ", scores: [] \},\
+      \{ label: "\uc0\u24819 \u30246 \u20294 \u27794 \u38283 \u22987 ", scores: ["P1+2", "S1+1"] \},\
+      \{ label: "\uc0\u24050 \u32147 \u22312 \u28187 \u37325 ", scores: ["S2+2", "P1+1"] \},\
+      \{ label: "\uc0\u39636 \u37325 \u24120 \u24573 \u32982 \u24573 \u30246 ", scores: ["S2+2", "Q10+1"] \}\
+    ]\
+  \},\
+  \{\
+    title: "7\uc0\u65039 \u8419  \u26368 \u36817 \u26159 \u21542 \u26377 \u20197 \u19979 \u29376 \u27841 \u65311 \u65288 \u21487 \u35079 \u36984 \u65289 ",\
+    type: "checkbox",\
+    options: [\
+      \{ label: "\uc0\u25163 \u33139 \u20912 \u20919 ", scores: ["E1+2"] \},\
+      \{ label: "\uc0\u23481 \u26131 \u38957 \u26248 \u12289 \u27683 \u33394 \u24046 ", scores: ["B2+2", "Q10+1"] \},\
+      \{ label: "\uc0\u29992 \u30524 \u36942 \u24230 \u12289 \u30524 \u30555 \u20094 \u28544 ", scores: ["L1+2"] \},\
+      \{ label: "\uc0\u20037 \u22352 \u20037 \u31449 \u24460 \u19979 \u32930 \u33131 \u33081 ", scores: ["E1+2", "F1+1"] \},\
+      \{ label: "\uc0\u24773 \u32210 \u36215 \u20239 \u22823 \u12289 \u22739 \u21147 \u22823 ", scores: ["F1+2", "Q10+1"] \},\
+      \{ label: "\uc0\u24120 \u24120 \u33144 \u32963 \u19981 \u36969 \u12289 \u23481 \u26131 \u33081 \u27683 ", scores: ["J1+2", "F1+1"] \},\
+      \{ label: "\uc0\u25490 \u20415 \u19981 \u38918 \u12289 \u20415 \u31192 \u22256 \u25854 ", scores: ["J1+2"] \},\
+      \{ label: "\uc0\u32908 \u32905 \u30176 \u30171 \u25110 \u36939 \u21205 \u24460 \u24674 \u24489 \u24930 ", scores: ["F1+2", "B1+1"] \}\
+    ]\
+  \},\
+  \{\
+    title: "8\uc0\u65039 \u8419  \u23478 \u26063 \u20013 \u26159 \u21542 \u26377 \u30142 \u30149 \u21490 \u65311 \u65288 \u21487 \u35079 \u36984 \u65289 ",\
+    type: "checkbox",\
+    options: [\
+      \{ label: "\uc0\u19977 \u39640 ", scores: ["F1+2", "E1+1"] \},\
+      \{ label: "\uc0\u24515 \u34880 \u31649 \u30142 \u30149 ", scores: ["E1+2", "F1+1"] \},\
+      \{ label: "\uc0\u31958 \u23615 \u30149 ", scores: ["F1+1", "S1+1"] \},\
+      \{ label: "\uc0\u28961 \u26126 \u39023 \u30149 \u21490 ", scores: [] \}\
+    ]\
+  \},\
+  \{\
+    title: "9\uc0\u65039 \u8419  \u24744 \u30446 \u21069 \u26377 \u22312 \u26381 \u29992 \u20445 \u20581 \u39135 \u21697 \u21966 \u65311 ",\
+    type: "radio",\
+    options: [\
+      \{ label: "\uc0\u26377 \u65292 \u22266 \u23450 \u35036 \u20805 ", scores: ["Q10+1", "F1+1"] \},\
+      \{ label: "\uc0\u20598 \u29246 \u24819 \u21040 \u25165 \u21507 ", scores: ["B1+1", "B2+1", "C1+1"] \},\
+      \{ label: "\uc0\u27794 \u26377 \u65292 \u20294 \u26377 \u33288 \u36259 \u38283 \u22987 ", scores: ["P1+1", "B2+1"] \}\
+    ]\
+  \},\
+  \{\
+    title: "\uc0\u55357 \u56607  \u24744 \u30446 \u21069 \u26368 \u22312 \u24847 \u30340 \u20581 \u24247 \u65295 \u20445 \u39178 \u30446 \u27161 \u26159 \u65311 \u65288 \u21487 \u35079 \u36984 \u65289 ",\
+    type: "checkbox",\
+    options: [\
+      \{ label: "\uc0\u25552 \u21319 \u31934 \u31070 \u33287 \u39636 \u21147 ", scores: ["B1+2", "Q10+1"] \},\
+      \{ label: "\uc0\u25913 \u21892 \u27683 \u33394 \u12289 \u32005 \u28516 \u33178 \u33394 ", scores: ["B2+2", "Q10+1"] \},\
+      \{ label: "\uc0\u20419 \u36914 \u20195 \u35613 \u33287 \u25490 \u20415 \u38918 \u26274 ", scores: ["S2+2", "P1+1"] \},\
+      \{ label: "\uc0\u39636 \u24907 \u31649 \u29702 \u12289 \u24819 \u35722 \u30246 ", scores: ["S1+2", "P1+1"] \},\
+      \{ label: "\uc0\u20445 \u35703 \u30524 \u30555 \u12289 \u25239 \u34253 \u20809 ", scores: ["L1+2"] \},\
+      \{ label: "\uc0\u31337 \u23450 \u33178 \u27841 \u12289 \u25913 \u21892 \u25935 \u24863 ", scores: ["C1+2", "Q10+1"] \}\
+    ]\
+  \},\
+  \{\
+    title: "11\uc0\u65039 \u8419  \u26368 \u36817 \u26159 \u21542 \u26377 \u20197 \u19979 \u32908 \u33178 \u22256 \u25854 \u65311 \u65288 \u21487 \u35079 \u36984 \u65289 ",\
+    type: "checkbox",\
+    options: [\
+      \{ label: "\uc0\u27683 \u33394 \u34847 \u40643 \u12289 \u33178 \u33394 \u19981 \u22343 ", scores: ["B2+2", "Q10+1"] \},\
+      \{ label: "\uc0\u29100 \u22812 \u24460 \u29190 \u30168 \u12289 \u33178 \u27841 \u24046 ", scores: ["B1+1", "F1+1", "C1+2"] \},\
+      \{ label: "\uc0\u32908 \u33178 \u25935 \u24863 \u12289 \u27867 \u32005 \u12289 \u23481 \u26131 \u36942 \u25935 ", scores: ["F1+1", "E1+1", "C1+2"] \},\
+      \{ label: "\uc0\u27611 \u23380 \u31895 \u22823 \u12289 \u33178 \u33394 \u26263 \u27785 ", scores: ["P1+1", "Q10+1", "C1+2"] \},\
+      \{ label: "\uc0\u33178 \u27841 \u31337 \u23450 \u65292 \u20294 \u24076 \u26395 \u26356 \u36879 \u20142 ", scores: ["C1+1", "B2+1"] \}\
+    ]\
+  \},\
+  \{\
+    title: "12\uc0\u65039 \u8419  \u24179 \u26178 \u26371 \u24590 \u40636 \u20445 \u39178 \u32908 \u33178 \u65311 ",\
+    type: "radio",\
+    options: [\
+      \{ label: "\uc0\u24190 \u20046 \u19981 \u20445 \u39178 ", scores: ["C1+1", "B2+1"] \},\
+      \{ label: "\uc0\u22522 \u26412 \u20445 \u28629 ", scores: ["C1+2"] \},\
+      \{ label: "\uc0\u26377 \u25975 \u38754 \u33180 \u12289 \u23450 \u26399 \u20445 \u39178 ", scores: ["C1+2", "Q10+1"] \},\
+      \{ label: "\uc0\u32908 \u33178 \u25935 \u24863 \u65292 \u21482 \u25954 \u29992 \u28331 \u21644 \u29986 \u21697 ", scores: ["C1+2", "F1+1"] \}\
+    ]\
+  \},\
+  \{\
+    title: "13\uc0\u65039 \u8419  \u21738 \u39006 \u29151 \u39178 \u25885 \u21462 \u21487 \u33021 \u19981 \u36275 \u65311 ",\
+    type: "radio",\
+    options: [\
+      \{ label: "\uc0\u32160 \u33394 \u34092 \u33756 ", scores: ["J1+2", "F1+1"] \},\
+      \{ label: "\uc0\u27700 \u26524 ", scores: ["J1+2"] \},\
+      \{ label: "\uc0\u26377 \u21507 \u20294 \u37327 \u19981 \u36275 ", scores: ["J1+1"] \},\
+      \{ label: "\uc0\u37117 \u24456 \u22343 \u34913 ", scores: [] \}\
+    ]\
+  \},\
+  \{\
+    title: "14\uc0\u65039 \u8419  \u26368 \u36817 \u26159 \u21542 \u20986 \u29694 \u20197 \u19979 \u24773 \u27841 \u65311 \u65288 \u21487 \u35079 \u36984 \u65289 ",\
+    type: "checkbox",\
+    options: [\
+      \{ label: "\uc0\u19968 \u24863 \u20882 \u23601 \u25302 \u24456 \u20037 \u25165 \u22909 ", scores: ["D1+2", "F1+1"] \},\
+      \{ label: "\uc0\u23567 \u23401 \u25110 \u38263 \u36649 \u20063 \u24120 \u29983 \u30149 ", scores: ["D1+2"] \},\
+      \{ label: "\uc0\u25563 \u23395 \u26131 \u36942 \u25935 \u12289 \u21345 \u21897 \u22184 ", scores: ["D1+1", "F1+1"] \},\
+      \{ label: "\uc0\u24819 \u25552 \u21319 \u33258 \u36523 \u33287 \u23478 \u20154 \u30340 \u38450 \u35703 \u21147 ", scores: ["D1+2", "Q10+1"] \}\
+    ]\
+  \}\
+];\
+\
+    const products = \{\
+        B1: \{\
+             name: "\uc0\u27963 \u21147 \u25136 \u31070 B\u32676 ",\
+             price: 980,\
+             recommendedQty: 2,\
+             image: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?auto=format&fit=crop&w=600"\
+           \},\
+           B2: \{\
+             name: "\uc0\u32654 \u38991 \u32005 \u28516 B\u32676 ",\
+             price: 920,\
+             recommendedQty: 1,\
+             image: "https://images.unsplash.com/photo-1606112219348-204d7d8b94ee?auto=format&fit=crop&w=600"\
+           \},\
+           P1: \{\
+             name: "\uc0\u21877 \u21877 \u39154 \u65288 \u20195 \u39184 \u65289 ",\
+             price: 850,\
+             recommendedQty: 2,\
+             image: "https://images.unsplash.com/photo-1598514982901-8f332d1c1e4b?auto=format&fit=crop&w=600"\
+           \},\
+           S1: \{\
+             name: "\uc0\u32406 \u23039 \u33590 \u33457 ",\
+             price: 790,\
+             recommendedQty: 1,\
+             image: "https://images.unsplash.com/photo-1590080876218-9c57d0caa9e4?auto=format&fit=crop&w=600"\
+           \},\
+           S2: \{\
+             name: "\uc0\u23365 \u36920 \u38808 \u34122 \u33457 ",\
+             price: 890,\
+             recommendedQty: 1,\
+             image: "https://images.unsplash.com/photo-1556228578-4c4c8e4bda36?auto=format&fit=crop&w=600"\
+           \},\
+           E1: \{\
+             name: "\uc0\u34451 \u28608 \u37238 ",\
+             price: 1080,\
+             recommendedQty: 1,\
+             image: "https://images.unsplash.com/photo-1596814361571-3c2cc5e5b3d0?auto=format&fit=crop&w=600"\
+           \},\
+           F1: \{\
+             name: "\uc0\u39770 \u27833 ",\
+             price: 950,\
+             recommendedQty: 2,\
+             image: "https://images.unsplash.com/photo-1585912270032-8f1c1bfb2eb1?auto=format&fit=crop&w=600"\
+           \},\
+           L1: \{\
+             name: "\uc0\u33865 \u40643 \u32032 ",\
+             price: 880,\
+             recommendedQty: 1,\
+             image: "https://images.unsplash.com/photo-1586201375761-83865001e17b?auto=format&fit=crop&w=600"\
+           \},\
+           C1: \{\
+             name: "\uc0\u22806 \u27852 \u39636 \u38754 \u33180 ",\
+             price: 1280,\
+             recommendedQty: 2,\
+             image: "https://images.unsplash.com/photo-1612004027753-7bbf38291759?auto=format&fit=crop&w=600"\
+           \},\
+           Q10: \{\
+             name: "\uc0\u36628 \u37237 \u32032 Q10\u65288 \u21151 \u33021 \u24615 \u38468 \u21152 \u65289 ",\
+             price: 990,\
+             recommendedQty: 1,\
+             image: "https://images.unsplash.com/photo-1583337130417-3346a1fcdf42?auto=format&fit=crop&w=600"\
+           \},\
+           D1: \{\
+             name: "\uc0\u38450 \u31142 \u30462 \u946 ",\
+             price: 1150,\
+             recommendedQty: 1,\
+             image: "https://images.unsplash.com/photo-1611691544918-56a9830e6d23?auto=format&fit=crop&w=600"\
+           \},\
+           J1: \{\
+             name: "\uc0\u27801 \u25289 \u39154 ",\
+             price: 860,\
+             recommendedQty: 2,\
+             image: "https://images.unsplash.com/photo-1587502536263-9298c3709943?auto=format&fit=crop&w=600"\
+           \}\
+         \};\
+\
+\
+    let current = 0;\
+    const answers = [];\
+    const scores = \{\};\
+\
+    const quizEl = document.getElementById("quiz");\
+    const nextBtn = document.getElementById("nextBtn");\
+    const submitBtn = document.getElementById("submitBtn");\
+    const resultsEl = document.getElementById("results");\
+    const priorityList = document.getElementById("priority-list");\
+    const optionalList = document.getElementById("optional-list");\
+    const priorityTotal = document.getElementById("priority-total");\
+    const allTotal = document.getElementById("all-total");\
+    const progressBar = document.getElementById("progressBar");\
+\
+    function renderQuestion() \{\
+      const q = quizData[current];\
+      let html = `<div class="question"><h2>$\{q.title\}</h2>`;\
+      q.options.forEach((opt, i) => \{\
+        html += `\
+          <label class="option">\
+            <input type="$\{q.type\}" name="q$\{current\}" value="$\{i\}" />\
+            $\{opt.label\}\
+          </label>`;\
+      \});\
+      html += `</div>`;\
+      quizEl.innerHTML = html;\
+\
+      const percent = (current / quizData.length) * 100;\
+      progressBar.style.width = `$\{percent\}%`;\
+    \}\
+\
+    function collectAnswers() \{\
+      const q = quizData[current];\
+      const inputs = document.querySelectorAll(`input[name="q$\{current\}"]:checked`);\
+      if (inputs.length === 0) \{\
+        alert("\uc0\u35531 \u36984 \u25799 \u33267 \u23569 \u19968 \u20491 \u36984 \u38917 ");\
+        return false;\
+      \}\
+      answers[current] = Array.from(inputs).map(i => parseInt(i.value));\
+      return true;\
+    \}\
+\
+    function calculateScores() \{\
+      quizData.forEach((q, i) => \{\
+        const selected = answers[i] || [];\
+        selected.forEach(index => \{\
+          const option = q.options[index];\
+          (option.scores || []).forEach(score => \{\
+            const [code, val] = score.split("+");\
+            scores[code] = (scores[code] || 0) + parseInt(val);\
+          \});\
+        \});\
+      \});\
+    \}\
+\
+    function renderResults() \{\
+      calculateScores();\
+      quizEl.classList.add("hidden");\
+      resultsEl.classList.remove("hidden");\
+      nextBtn.classList.add("hidden");\
+      submitBtn.classList.add("hidden");\
+\
+      const priority = [];\
+      const optional = [];\
+      let total = 0;\
+      let priorityTotalVal = 0;\
+\
+      Object.entries(scores).forEach(([code, score]) => \{\
+        const product = products[code];\
+        if (!product || score < 1) return;\
+        const subtotal = product.price * product.recommendedQty;\
+        total += subtotal;\
+        if (score >= 4) \{\
+          priority.push(\{ ...product, subtotal \});\
+          priorityTotalVal += subtotal;\
+        \} else if (score >= 2) \{\
+          optional.push(\{ ...product, subtotal \});\
+        \}\
+      \});\
+\
+      function card(p) \{\
+        return `\
+          <div class="result-card">\
+	   <img src="$\{p.image\}" alt="$\{p.name\}" style="width: 100%; border-radius: 8px; margin-bottom: 10px;" />\
+            <h3>$\{p.name\}</h3>\
+            <p>\uc0\u24314 \u35696 \u29992 \u37327 \u65306 $\{p.recommendedQty\} \u30418 \u65295 \u26376 </p>\
+            <p>\uc0\u21934 \u20729 \u65306 $$\{p.price\}\u65372 \u32317 \u37329 \u38989 \u65306 $$\{p.subtotal\}</p>\
+          </div>\
+        `;\
+      \}\
+\
+      priorityList.innerHTML = priority.map(card).join("");\
+      optionalList.innerHTML = optional.map(card).join("");\
+      priorityTotal.textContent = `$$\{priorityTotalVal\}`;\
+      allTotal.textContent = `$$\{total\}`;\
+      progressBar.style.width = `100%`;\
+    \}\
+\
+    nextBtn.addEventListener("click", () => \{\
+      if (!collectAnswers()) return;\
+      current++;\
+      if (current < quizData.length) \{\
+        renderQuestion();\
+        if (current === quizData.length - 1) \{\
+          nextBtn.classList.add("hidden");\
+          submitBtn.classList.remove("hidden");\
+        \}\
+      \}\
+    \});\
+\
+    submitBtn.addEventListener("click", () => \{\
+      if (!collectAnswers()) return;\
+      renderResults();\
+    \});\
+    renderQuestion();\
+      function restartQuiz() \{\
+        window.location.href = "https://freyja-cin.github.io/iho/";\
+  \}\
+    \
+  </script>\
+</body>\
+</html>\
+}
